@@ -8,7 +8,7 @@ export default function Home() {
             <div className="chat_screen bg-blue-100 w-full h-9/10"></div>
             <div className="w-full h-1/10">
               <input type="text" className="bg-white border-blue-500 border-2 px-2 py-1" />
-              <input type="button" value="Send" className="bg-white text-blue-500 border-blue-500 border-2 h-6 w-10" />
+              <input type="button" value="Send" className="relative bg-blue-500 text-white h-6 w-10 duration-300 hover:opacity-60 active:top-[1px] cursor-pointer" />
             </div>
           </div>
         </div>
