@@ -1,13 +1,14 @@
 import Link from 'next/link';
-import type { Metadata } from "next";
+import LogoutButton from '@/components/LogoutButton';
+import type { Metadata } from 'next';
 import { Inconsolata } from 'next/font/google';
-import "./globals.css";
+import './globals.css';
 
 const fnt = Inconsolata({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: "Chat time",
-  description: "App for chatting with friends",
+  title: 'Chat time',
+  description: 'App for chatting with friends',
 };
 
 export default function RootLayout({
@@ -21,6 +22,7 @@ export default function RootLayout({
         <header className="bg-blue-500 h-10">
           <div className="w-[1200px] mx-auto my-0">
             <Link href="/" className="text-white text-3xl font-bold leading-10 duration-300 hover:opacity-60">Chat Time</Link>
+            <LogoutButton />
           </div>
         </header>
         {children}

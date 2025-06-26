@@ -1,4 +1,13 @@
-export default function Home() {
+import { getAuthSession } from '@/lib/getSession';
+import { redirect } from 'next/navigation';
+
+export default async function Home() {
+  const session = await getAuthSession();
+
+  if (!session) {
+    return redirect('/login');
+  }
+
   return (
     <div>
       <main className="h-screen">
