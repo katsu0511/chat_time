@@ -1,54 +1,52 @@
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { randomUUID, randomBytes } from 'crypto';
+import type { User } from 'next-auth';
 
 export const authOptions = {
-  /* providers */
   providers: [
-    CredentialsProvider(
-      {
-        id: 'user',
-        name: 'User',
-        credentials: {
-          email: { label: 'Email', type: 'email', placeholder: 'Email' },
-          password: { label: 'Password', type: 'password' }
-        },
-        async authorize(credentials) {
-          const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/auth/user`, {
-            method: 'POST',
-            body: JSON.stringify(credentials),
-            headers: {
-              'Content-Type': 'application/json'
-            }
-          })
+    CredentialsProvider({
+      name: 'Credentials',
+      credentials: {
+        email: { label: 'Email', type: 'email' },
+        password: { label: 'Password', type: 'password' },
+      },
+      async authorize(
+        credentials: Record<'email' | 'password', string> | undefined,
+        req: unknown
+      ) {
 
-          const user = res.json()
+        if (!credentials) return null;
+        console.log(req);
 
-          if (res.ok && user) {
-            return user
-          }
+        const user: User = {
+          id: '1',
+          name: 'Katsuya',
+          email: 'katsuya@yahoo.com',
+        }
 
-          return null
-        },
-      }
-    ),
+        const { email, password } = credentials;
+
+        if (email === 'katsuya@yahoo.com' && password === 'password') {
+          return user
+        }
+
+        return null
+      },
+    }),
   ],
 
-  /* callbacks */
   callbacks: {
   },
 
-  /* secret */
   secret: process.env.NEXTAUTH_SECRET,
 
-  /* jwt */
   jwt: {
-    maxAge: 3 * 24 * 60 * 60,       // 3 days
+    maxAge: 3 * 24 * 60 * 60,
   },
 
-  /* session */
   session: {
-    maxAge: 30 * 24 * 60 * 60,      // 30 days
-    updateAge: 24 * 60 * 60,        // 24 hours
+    maxAge: 30 * 24 * 60 * 60,
+    updateAge: 24 * 60 * 60,
     generateSessionToken: () => {
       return randomUUID?.() ?? randomBytes(32).toString('hex');
     }
