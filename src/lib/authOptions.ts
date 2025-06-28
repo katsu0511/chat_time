@@ -1,54 +1,42 @@
 import CredentialsProvider from 'next-auth/providers/credentials';
-import { randomUUID, randomBytes } from 'crypto';
-import type { User } from 'next-auth';
+import { getUser } from '@/lib/getter';
+import type { Session, User } from 'next-auth';
+import type { JWT } from 'next-auth/jwt';
 
 export const authOptions = {
   providers: [
     CredentialsProvider({
       name: 'Credentials',
       credentials: {
-        email: { label: 'Email', type: 'email' },
-        password: { label: 'Password', type: 'password' },
+        userid: { label: 'UserID', type: 'text', placeholder: 'User ID' },
+        password: { label: 'Password', type: 'password', placeholder: 'Password' }
       },
-      async authorize(
-        credentials: Record<'email' | 'password', string> | undefined,
-        req: unknown
-      ) {
-
+      async authorize(credentials: Record<'userid' | 'password', string> | undefined) {
         if (!credentials) return null;
-        console.log(req);
-
-        const user: User = {
-          id: '1',
-          name: 'Katsuya',
-          email: 'katsuya@yahoo.com',
-        }
-
-        const { email, password } = credentials;
-
-        if (email === 'katsuya@yahoo.com' && password === 'password') {
-          return user
-        }
-
-        return null
+        return await getUser(credentials.userid, credentials.password);
       },
     }),
   ],
-
-  callbacks: {
-  },
-
   secret: process.env.NEXTAUTH_SECRET,
-
   jwt: {
-    maxAge: 3 * 24 * 60 * 60,
+    maxAge: 7 * 24 * 60 * 60
   },
-
   session: {
-    maxAge: 30 * 24 * 60 * 60,
-    updateAge: 24 * 60 * 60,
-    generateSessionToken: () => {
-      return randomUUID?.() ?? randomBytes(32).toString('hex');
-    }
+    maxAge: 7 * 24 * 60 * 60,
+    updateAge: 24 * 60 * 60
+  },
+  callbacks: {
+    async jwt({ token, user }: {token: JWT, user: User}) {
+      if (user) {
+        token.id = user.id
+        token.name = user.name
+        token.email = user.email
+      }
+      return token
+    },
+    async session({ session, token }: {session: Session, token: JWT}) {
+      session.user.id = token.id as string
+      return session
+    },
   }
 }
