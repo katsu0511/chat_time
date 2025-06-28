@@ -4,8 +4,8 @@ import { signIn } from 'next-auth/react';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-export default function Login() {
-  const [email, setEmail] = useState('');
+export default function LoginForm() {
+  const [userid, setUserid] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const router = useRouter();
@@ -15,14 +15,14 @@ export default function Login() {
 
     const res = await signIn('credentials', {
       redirect: false,
-      email,
+      userid,
       password,
     });
 
     if (res?.ok) {
       router.push('/');
     } else {
-      setError('ログインに失敗しました');
+      setError('Failed to login');
     }
   };
 
@@ -33,8 +33,8 @@ export default function Login() {
         <input
           type="text"
           className="bg-white border-blue-500 border-2 px-2 py-1"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          value={userid}
+          onChange={(e) => setUserid(e.target.value)}
           required
         />
       </div>
