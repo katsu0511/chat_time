@@ -4,7 +4,7 @@ import type { User } from 'next-auth';
 export async function getUser(userid: string, password: string): Promise<User | null> {
   const userInfo = await prisma.user.findUnique({
     where: {
-      email: userid,
+      userid: userid,
       password: password
     }
   });
@@ -13,7 +13,7 @@ export async function getUser(userid: string, password: string): Promise<User | 
 
   return {
     id: userInfo.id as unknown as string,
-    name: userInfo.name,
-    email: userInfo.email
+    userid: userInfo.userid,
+    name: userInfo.name
   }
 }
