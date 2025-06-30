@@ -54,7 +54,7 @@ export default function LoginForm() {
         <input type="submit" value="Login" className="block bg-white text-blue-500 border-blue-500 border-2 rounded-md h-10 w-20 mx-auto my-0 duration-300 hover:bg-blue-500 hover:text-white cursor-pointer" />
       </div>
       <div className="flex justify-center mt-10">
-        <Link href={'./signup'} className="inline-block text-blue-500 duration-300 hover:opacity-6 cursor-pointer">Signup</Link>
+        <Link href={'./signup'} className="inline-block text-blue-500 duration-300 hover:opacity-6 cursor-pointer">&gt;&gt; Signup</Link>
       </div>
     </form>
   );
