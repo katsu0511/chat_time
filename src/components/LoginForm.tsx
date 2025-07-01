@@ -33,7 +33,7 @@ export default function LoginForm() {
         <label className="block w-20">User ID: </label>
         <input
           type="text"
-          className="bg-white border-blue-500 border-2 px-2 py-1"
+          className="bg-white border-blue-500 border-2 px-2 py-1 outline-none appearance-none"
           value={userid}
           onChange={(e) => setUserid(e.target.value)}
           required
@@ -43,7 +43,7 @@ export default function LoginForm() {
         <label className="block w-20">Password: </label>
         <input
           type="password"
-          className="bg-white border-blue-500 border-2 px-2 py-1"
+          className="bg-white border-blue-500 border-2 px-2 py-1 outline-none appearance-none"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
