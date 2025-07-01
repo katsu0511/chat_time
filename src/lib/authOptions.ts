@@ -1,5 +1,6 @@
 import CredentialsProvider from 'next-auth/providers/credentials';
-import { getUser } from '@/lib/getter';
+import { compare } from "bcrypt";
+import { getUser, getUserForLogin } from '@/lib/getter';
 import type { Session, User } from 'next-auth';
 import type { JWT } from 'next-auth/jwt';
 
@@ -13,7 +14,11 @@ export const authOptions = {
       },
       async authorize(credentials: Record<'userid' | 'password', string> | undefined) {
         if (!credentials) return null;
-        return await getUser(credentials.userid, credentials.password);
+        const user = await getUserForLogin(credentials.userid);
+        if (!user) return null;
+        const isValid = await compare(credentials.password, user.password);
+        if (!isValid) return null;
+        return await getUser(credentials.userid, user.password);
       },
     }),
   ],
