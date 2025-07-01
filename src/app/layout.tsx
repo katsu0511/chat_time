@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import LogoutButton from '@/components/LogoutButton';
+import { getAuthSession } from '@/lib/getSession';
 import type { Metadata } from 'next';
 import { Inconsolata } from 'next/font/google';
 import './globals.css';
@@ -11,18 +12,23 @@ export const metadata: Metadata = {
   description: 'App for chatting with friends',
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await getAuthSession();
+
   return (
     <html lang="en">
       <body className={fnt.className}>
         <header className="bg-blue-500 h-10">
           <div className="w-[1200px] mx-auto my-0">
-            <Link href="/" className="text-white text-3xl font-bold leading-10 duration-300 hover:opacity-60">Chat Time</Link>
-            <LogoutButton />
+            {session
+              ? <Link href="/" className="text-white text-3xl font-bold leading-10 duration-300 hover:opacity-60">Chat Time</Link>
+              : <h1 className="text-white text-3xl font-bold leading-10">Chat Time</h1>
+            }
+            {session && <LogoutButton />}
           </div>
         </header>
         {children}
