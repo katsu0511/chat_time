@@ -17,3 +17,12 @@ export async function getUser(userid: string, password: string): Promise<User | 
     name: userInfo.name
   }
 }
+
+export async function getUserForLogin(userid: string) {
+  const userInfo = await prisma.user.findUnique({
+    where: {
+      userid: userid
+    }
+  });
+  return userInfo;
+}
