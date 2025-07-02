@@ -1,10 +1,10 @@
 'use client';
 
-import Link from 'next/link';
 import { signIn } from 'next-auth/react';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Button from './Button';
+import PageLink from './PageLink';
 
 export default function LoginForm() {
   const [userid, setUserid] = useState('');
@@ -51,9 +51,7 @@ export default function LoginForm() {
         />
       </div>
       <Button usage='Login' error={error} />
-      <div className="flex justify-center mt-10">
-        <Link href={'./signup'} className="inline-block text-blue-500 duration-300 hover:opacity-6 cursor-pointer">&gt;&gt; Signup</Link>
-      </div>
+      <PageLink usage='signup' />
     </form>
   );
 }
