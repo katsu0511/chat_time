@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { signIn } from 'next-auth/react';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Button from './Button';
 
 export default function LoginForm() {
   const [userid, setUserid] = useState('');
@@ -49,10 +50,7 @@ export default function LoginForm() {
           required
         />
       </div>
-      <div className="py-2">
-        {error && <p>{error}</p>}
-        <input type="submit" value="Login" className="block bg-white text-blue-500 border-blue-500 border-2 rounded-md h-10 w-20 mx-auto my-0 duration-300 hover:bg-blue-500 hover:text-white cursor-pointer" />
-      </div>
+      <Button usage='Login' error={error} />
       <div className="flex justify-center mt-10">
         <Link href={'./signup'} className="inline-block text-blue-500 duration-300 hover:opacity-6 cursor-pointer">&gt;&gt; Signup</Link>
       </div>

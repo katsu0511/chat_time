@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { createUser } from '@/lib/actions';
+import Button from './Button';
 
 export default function SignupForm() {
   const [name, setName] = useState('');
@@ -67,10 +68,7 @@ export default function SignupForm() {
           required
         />
       </div>
-      <div className="py-2">
-        {error && <p className='text-red-500 font-bold text-center mb-4'>{error}</p>}
-        <input type="submit" value="Signup" className="block bg-white text-blue-500 border-blue-500 border-2 rounded-md h-10 w-20 mx-auto my-0 duration-300 hover:bg-blue-500 hover:text-white cursor-pointer" />
-      </div>
+      <Button usage='Signup' error={error} />
       <div className="flex justify-center mt-10">
         <Link href={'./login'} className="inline-block text-blue-500 duration-300 hover:opacity-6 cursor-pointer">&gt;&gt; Login</Link>
       </div>
