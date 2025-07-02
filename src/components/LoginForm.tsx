@@ -1,8 +1,9 @@
 'use client';
 
-import { signIn } from 'next-auth/react';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { signIn } from 'next-auth/react';
+import Input from './Input';
 import Button from './Button';
 import PageLink from './PageLink';
 
@@ -30,26 +31,8 @@ export default function LoginForm() {
 
   return (
     <form className="w-[1200px] h-screen mx-auto my-0 py-30" onSubmit={handleSubmit}>
-      <div className="flex justify-center items-center py-2">
-        <label className="block w-20">User ID: </label>
-        <input
-          type="text"
-          className="bg-white border-blue-500 border-2 px-2 py-1 outline-none appearance-none"
-          value={userid}
-          onChange={(e) => setUserid(e.target.value)}
-          required
-        />
-      </div>
-      <div className="flex justify-center items-center py-2">
-        <label className="block w-20">Password: </label>
-        <input
-          type="password"
-          className="bg-white border-blue-500 border-2 px-2 py-1 outline-none appearance-none"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-      </div>
+      <Input label='User ID' type='text' value={userid} onChange={(e) => setUserid(e.target.value)} />
+      <Input label='Password' type='password' value={password} onChange={(e) => setPassword(e.target.value)}/>
       <Button usage='Login' error={error} />
       <PageLink usage='signup' />
     </form>
