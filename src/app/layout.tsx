@@ -23,7 +23,7 @@ export default async function RootLayout({
     <html lang="en">
       <body className={fnt.className}>
         <header className="bg-blue-500 h-10">
-          <div className="w-[1200px] mx-auto my-0">
+          <div className="flex justify-between w-[1200px] mx-auto my-0">
             {session
               ? <Link href="/" className="text-white text-3xl font-bold leading-10 duration-300 hover:opacity-60">Chat Time</Link>
               : <h1 className="text-white text-3xl font-bold leading-10">Chat Time</h1>
