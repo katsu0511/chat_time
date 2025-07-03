@@ -10,10 +10,6 @@ export default async function Signup() {
   }
 
   return (
-    <div>
-      <main className="signup">
-        <SignupForm />
-      </main>
-    </div>
+    <SignupForm />
   );
 }
