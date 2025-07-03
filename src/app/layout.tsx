@@ -22,7 +22,7 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className={fnt.className}>
-        <header className="bg-blue-500 h-10">
+        <header className="bg-blue-500 w-full h-10">
           <div className="flex justify-between w-[1200px] mx-auto my-0">
             {session
               ? <Link href="/" className="text-white text-3xl font-bold leading-10 duration-300 hover:opacity-60">Chat Time</Link>
@@ -31,8 +31,12 @@ export default async function RootLayout({
             {session && <LogoutButton />}
           </div>
         </header>
-        {children}
-        <footer className="bg-blue-500 h-10">
+        <main className="w-full h-[calc(100lvh-80px)]">
+          <div className="w-[1200px] h-full mx-auto my-0">
+            {children}
+          </div>
+        </main>
+        <footer className="bg-blue-500 w-full h-10">
           <div className="flex justify-center w-[1200px] mx-auto my-0">
             <Link href="" className="block bg-white text-blue-500 border-blue-500 border-l-4 border-r-2 border-y-4 text-lg font-bold text-center h-10 w-50 duration-300 hover:bg-blue-500 hover:text-white">Chat</Link>
             <Link href="" className="block bg-white text-blue-500 border-blue-500 border-x-2 border-y-4 text-lg font-bold text-center h-10 w-50 duration-300 hover:bg-blue-500 hover:text-white">Friends</Link>
