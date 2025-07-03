@@ -24,7 +24,7 @@ export default async function RootLayout({
     <html lang='en'>
       <body className={fnt.className}>
         <header className='bg-blue-500 w-full h-10'>
-          <div className='flex justify-between w-[1200px] mx-auto my-0'>
+          <div className='flex justify-between max-w-screen-xl w-full h-full px-4 mx-auto'>
             {session
               ? <Link href='/' className='text-white text-3xl font-bold leading-10 duration-300 hover:opacity-60'>Chat Time</Link>
               : <h1 className='text-white text-3xl font-bold leading-10'>Chat Time</h1>
@@ -32,19 +32,19 @@ export default async function RootLayout({
             {session && <LogoutButton />}
           </div>
         </header>
-        <main className='w-full h-[calc(100lvh-80px)]'>
-          <div className='w-[1200px] h-full mx-auto my-0'>
+        <main className='w-full h-[calc(100dvh-80px)]'>
+          <div className='max-w-screen-xl w-full h-full px-4 mx-auto'>
             {children}
           </div>
         </main>
         <footer className='bg-blue-500 w-full h-10'>
           {session
-            ? <div className='flex justify-center w-[1200px] mx-auto my-0'>
+            ? <div className='flex justify-center max-w-screen-xl w-full h-full px-4 mx-auto'>
                 <FooterLink display='Chat' url='/'/>
                 <FooterLink display='Friends' url='/friends'/>
                 <FooterLink display='Settings' url='/settings'/>
               </div>
-            : <div className='text-white text-xl w-[1200px] leading-10 text-center mx-auto my-0'>&copy;Chat time</div>
+            : <div className='text-white text-xl max-w-screen-xl w-full h-full leading-10 text-center px-4 mx-auto'>&copy;Chat time</div>
           }
         </footer>
       </body>
