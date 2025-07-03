@@ -15,7 +15,7 @@ export default function SignupForm() {
   };
 
   return (
-    <form className="w-full pt-60" onSubmit={signup}>
+    <form className='w-full pt-60' onSubmit={signup}>
       <Input label='Name' type='text' value={name} onChange={(e) => setName(e.target.value)}/>
       <Input label='User ID' type='text' value={userid} onChange={(e) => setUserid(e.target.value)} />
       <Input label='Password' type='password' value={password} onChange={(e) => setPassword(e.target.value)}/>
