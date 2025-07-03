@@ -21,7 +21,7 @@ export default async function RootLayout({
   const session = await getAuthSession();
 
   return (
-    <html lang='en'>
+    <html lang='en' suppressHydrationWarning>
       <body className={fnt.className}>
         <header className='bg-blue-500 w-full h-10'>
           <div className='flex justify-between max-w-screen-xl w-full h-full px-4 mx-auto'>
