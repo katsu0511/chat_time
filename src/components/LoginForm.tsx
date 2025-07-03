@@ -1,17 +1,13 @@
 'use client';
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import useAuth from '@/lib/useAuth';
 import { signIn } from 'next-auth/react';
 import Input from './Input';
 import Button from './Button';
 import PageLink from './PageLink';
 
 export default function LoginForm() {
-  const [userid, setUserid] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const router = useRouter();
+  const { userid, setUserid, password, setPassword, error, setError, router } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
