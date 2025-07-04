@@ -1,10 +1,9 @@
 import './globals.css';
 import { Inconsolata } from 'next/font/google';
 import type { Metadata } from 'next';
-import { getAuthSession } from '@/lib/getSession';
 import Provider from './providers';
 import Header from '@/components/Header';
-import FooterLink from '@/components/FooterLink';
+import Footer from '@/components/Footer';
 
 const fnt = Inconsolata({ subsets: ['latin'] });
 
@@ -18,8 +17,6 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const session = await getAuthSession();
-
   return (
     <html lang='en' suppressHydrationWarning>
       <body className={fnt.className}>
@@ -30,16 +27,7 @@ export default async function RootLayout({
               {children}
             </div>
           </main>
-          <footer className='bg-blue-500 w-full h-10'>
-            {session
-              ? <div className='flex justify-center max-w-screen-xl w-full h-full px-4 mx-auto'>
-                  <FooterLink display='Chat' url='/'/>
-                  <FooterLink display='Friends' url='/friends'/>
-                  <FooterLink display='Settings' url='/settings'/>
-                </div>
-              : <div className='text-white text-xl max-w-screen-xl w-full h-full leading-10 text-center px-4 mx-auto'>&copy;Chat time</div>
-            }
-          </footer>
+          <Footer />
         </Provider>
       </body>
     </html>
