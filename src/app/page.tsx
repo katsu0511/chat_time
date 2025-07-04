@@ -9,13 +9,13 @@ export default async function Home() {
   }
 
   return (
-    <div className='flex justify-center w-full h-full'>
-      <div className='w-3/10 h-full bg-white border-blue-500 border-x-4'></div>
+    <div className='flex w-full h-full border-blue-500 border-x-4'>
+      <div className='w-3/10 h-full bg-white'></div>
       <div className='w-7/10 h-full'>
-        <div className='bg-blue-100 w-full h-9/10'></div>
-        <div className='w-full h-1/10'>
-          <input type='text' className='bg-white border-blue-500 border-2 px-2 py-1' />
-          <input type='button' value='Send' className='relative bg-blue-500 text-white h-6 w-10 duration-300 hover:opacity-60 active:top-[1px] cursor-pointer' />
+        <div className='bg-blue-100 w-full h-19/20'></div>
+        <div className='flex w-full h-1/20'>
+          <input type='text' className='block bg-white border-blue-400 border-2 w-9/10 h-full px-2 py-1 outline-none appearance-none' />
+          <input type='button' className='block relative bg-blue-400 text-white w-1/10 h-full duration-300 hover:opacity-60 active:top-[2px] cursor-pointer' value='Send' />
         </div>
       </div>
     </div>
