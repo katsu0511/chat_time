@@ -3,6 +3,7 @@ import { Inconsolata } from 'next/font/google';
 import type { Metadata } from 'next';
 import Provider from './providers';
 import Header from '@/components/Header';
+import Main from '@/components/Main';
 import Footer from '@/components/Footer';
 
 const fnt = Inconsolata({ subsets: ['latin'] });
@@ -22,11 +23,7 @@ export default async function RootLayout({
       <body className={fnt.className}>
         <Provider>
           <Header />
-          <main className='w-full h-[calc(100dvh-80px)]'>
-            <div className='max-w-screen-xl w-full h-full px-4 mx-auto'>
-              {children}
-            </div>
-          </main>
+          <Main>{children}</Main>
           <Footer />
         </Provider>
       </body>
