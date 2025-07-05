@@ -2,7 +2,7 @@ import './globals.css';
 import { Inconsolata } from 'next/font/google';
 import type { Metadata } from 'next';
 import { getAuthSession } from '@/lib/getSession';
-import Provider from './providers';
+import SessionProviderWrapper from '@/components/SessionProviderWrapper';
 import { ThemeProviderWrapper } from '@/components/ThemeProviderWrapper';
 import Header from '@/components/Header';
 import Main from '@/components/Main';
@@ -25,13 +25,13 @@ export default async function RootLayout({
   return (
     <html lang='en' className='select-none' suppressHydrationWarning>
       <body className={fnt.className}>
-        <Provider session={session}>
+        <SessionProviderWrapper session={session}>
           <ThemeProviderWrapper>
             <Header />
             <Main>{children}</Main>
             <Footer />
           </ThemeProviderWrapper>
-        </Provider>
+        </SessionProviderWrapper>
       </body>
     </html>
   );
