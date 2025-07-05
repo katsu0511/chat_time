@@ -3,6 +3,7 @@ import { Inconsolata } from 'next/font/google';
 import type { Metadata } from 'next';
 import { getAuthSession } from '@/lib/getSession';
 import Provider from './providers';
+import { ThemeProviderWrapper } from '@/components/ThemeProviderWrapper';
 import Header from '@/components/Header';
 import Main from '@/components/Main';
 import Footer from '@/components/Footer';
@@ -25,9 +26,11 @@ export default async function RootLayout({
     <html lang='en' className='select-none' suppressHydrationWarning>
       <body className={fnt.className}>
         <Provider session={session}>
-          <Header />
-          <Main>{children}</Main>
-          <Footer />
+          <ThemeProviderWrapper>
+            <Header />
+            <Main>{children}</Main>
+            <Footer />
+          </ThemeProviderWrapper>
         </Provider>
       </body>
     </html>
