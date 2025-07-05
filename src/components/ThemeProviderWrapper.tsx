@@ -2,7 +2,7 @@
 
 import { createContext, useState, useEffect, useMemo } from 'react';
 import { PaletteMode, Theme, createTheme, ThemeProvider } from '@mui/material/styles';
-import { grey } from '@mui/material/colors';
+import { grey, blue } from '@mui/material/colors';
 import CssBaseline from '@mui/material/CssBaseline';
 
 type ThemeContext = {
@@ -38,14 +38,25 @@ export function ThemeProviderWrapper({ children }: { children: React.ReactNode }
           mode,
           ...(mode === 'light'
             ? {
-                primary: { main: '#000', contrastText: '#000' },
-                background: { default: '#fff' },
+                primary: { main: blue[500], contrastText: '#000' },
+                secondary: { main: blue[400], light: blue[100], contrastText: '#fff' },
+                background: { default: '#fff' }
               }
             : {
-                primary: { main: '#fff', contrastText: '#fff' },
+                primary: { main: blue[500], contrastText: '#fff' },
+                secondary: { main: blue[400], light: blue[100], contrastText: '#fff' },
                 background: { default: grey[700] }
               }
           ),
+        },
+        components: {
+          MuiButton: {
+            styleOverrides: {
+              root: {
+                textTransform: 'none',
+              },
+            },
+          },
         },
       }),
     [mode]
