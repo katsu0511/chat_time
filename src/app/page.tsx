@@ -1,5 +1,7 @@
 import { getAuthSession } from '@/lib/getSession';
 import { redirect } from 'next/navigation';
+import { Input, Button } from '@mui/material';
+import { blue } from '@mui/material/colors';
 
 export default async function Home() {
   const session = await getAuthSession();
@@ -14,8 +16,39 @@ export default async function Home() {
       <div className='w-7/10 h-full'>
         <div className='bg-blue-100 w-full h-19/20'></div>
         <div className='flex w-full h-1/20'>
-          <input type='text' className='block border-blue-400 border-2 w-9/10 h-full px-2 py-1 outline-none appearance-none' />
-          <input type='button' className='block relative bg-blue-400 text-white w-1/10 h-full duration-300 hover:opacity-60 active:top-[2px] cursor-pointer' value='Send' />
+          <Input
+            disableUnderline
+            sx={{
+              display: 'block',
+              width: '90%',
+              height: '100%'
+            }}
+            inputProps={{
+              sx: {
+                display: 'block',
+                border: '2px solid',
+                borderColor: blue[400],
+                boxSizing: 'border-box',
+                width: '100%',
+                height: '100%',
+                p: 1,
+                appearance: 'none'
+              }
+            }}
+          />
+          <Button
+            variant='contained'
+            color='secondary'
+            disableElevation={true}
+            sx={{
+              display: 'block',
+              width: '10%',
+              height: '100%',
+              borderRadius: '0'
+            }}
+          >
+            Send
+          </Button>
         </div>
       </div>
     </div>
