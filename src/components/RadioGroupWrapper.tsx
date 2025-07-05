@@ -11,7 +11,7 @@ export default function RadioGroupWrapper() {
 
   return (
     <div className='flex items-center w-full h-100'>
-      <FormLabel component='legend' sx={{ marginRight: 1, color: theme.palette.primary.contrastText }}>Theme: </FormLabel>
+      <FormLabel component='legend' sx={{ marginRight: 1, color: theme.palette.primary.main }}>Theme: </FormLabel>
       <RadioGroup name='theme' value={mode} onChange={toggleMode} row>
         <FormControlLabel value='light' control={<Radio />} label='Light' />
         <FormControlLabel value='dark' control={<Radio />} label='Dark' />
