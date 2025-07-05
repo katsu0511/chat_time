@@ -1,12 +1,13 @@
 'use client';
 
 import { createContext, useState, useEffect, useMemo } from 'react';
-import { PaletteMode, createTheme, ThemeProvider } from '@mui/material/styles';
-import { amber, grey } from '@mui/material/colors';
+import { PaletteMode, Theme, createTheme, ThemeProvider } from '@mui/material/styles';
+import { grey } from '@mui/material/colors';
 import CssBaseline from '@mui/material/CssBaseline';
 
 type ThemeContext = {
   mode: PaletteMode,
+  theme: Theme,
   toggleMode: () => void
 }
 
@@ -36,10 +37,13 @@ export function ThemeProviderWrapper({ children }: { children: React.ReactNode }
         palette: {
           mode,
           ...(mode === 'light'
-            ? { primary: amber }
+            ? {
+                primary: { main: '#000', contrastText: '#000' },
+                background: { default: '#fff' },
+              }
             : {
-                primary: { main: grey[500], contrastText: '#fff' },
-                background: { default: grey[400], paper: grey[400] },
+                primary: { main: '#fff', contrastText: '#fff' },
+                background: { default: grey[700] }
               }
           ),
         },
@@ -50,7 +54,7 @@ export function ThemeProviderWrapper({ children }: { children: React.ReactNode }
   if (!mounted) return null;
 
   return (
-    <ThemeContext.Provider value={{mode, toggleMode}}>
+    <ThemeContext.Provider value={{mode, theme, toggleMode}}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
         {children}
