@@ -4,10 +4,7 @@ import SendMessage from '@/components/SendMessage';
 
 export default async function Home() {
   const session = await getAuthSession();
-
-  if (!session) {
-    return redirect('/login');
-  }
+  if (!session) return redirect('/login');
 
   return (
     <div className='flex w-full h-full border-blue-500 border-x-4'>
