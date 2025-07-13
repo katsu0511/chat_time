@@ -1,11 +1,11 @@
 'use client';
 
 import { useState } from 'react';
-import type { User } from 'next-auth';
+import type { Session, User } from 'next-auth';
 import { Button, Input } from '@mui/material';
 import { blue } from '@mui/material/colors';
 
-export default function SearchUsers() {
+export default function SearchUsers(props: {session: Session, friendIds: number[]}) {
   const [users, setUsers] = useState<React.ReactNode[]>([]);
 
   const searchUsers = async (name: string) => {
@@ -28,10 +28,12 @@ export default function SearchUsers() {
           </div>
           <div className='w-[72px] h-full pr-2'>
             {
+              value.id != props.session.user.id &&
               <Button
                 variant='contained'
                 color='secondary'
                 disableElevation={true}
+                disabled={props.friendIds.includes(value.id as unknown as number)}
                 sx={{
                   display: 'block',
                   width: '64px',
@@ -42,7 +44,7 @@ export default function SearchUsers() {
                   marginBottom: '6px'
                 }}
               >
-                Add
+                {props.friendIds.includes(value.id as unknown as number) ? 'Friend' : 'Add'}
               </Button>
             }
           </div>
