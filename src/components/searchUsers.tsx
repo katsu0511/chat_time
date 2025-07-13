@@ -2,11 +2,11 @@
 
 import { useState } from 'react';
 import type { User } from 'next-auth';
-import { Input } from '@mui/material';
+import { Button, Input } from '@mui/material';
 import { blue } from '@mui/material/colors';
 
 export default function SearchUsers() {
-  const [users, setUsers] = useState<React.ReactNode[]>();
+  const [users, setUsers] = useState<React.ReactNode[]>([]);
 
   const searchUsers = async (name: string) => {
     name = name.trim();
@@ -21,7 +21,32 @@ export default function SearchUsers() {
     else {
       const json: User[] = await res.json();
       const infos = json.map(value => (
-        <li key={value.id}>Name: {value.name}, User ID: {value.userid}</li>
+        <li key={value.id} className='flex w-[400px] h-[50px] mx-auto my-0 border-blue-500 border-b-1'>
+          <div className='w-[328px] h-full text-left px-2'>
+            <p className='text-xl w-full h-[25px]'>{value.name}</p>
+            <p className='text-sm w-full h-[24px] leading-6'>{value.userid}</p>
+          </div>
+          <div className='w-[72px] h-full pr-2'>
+            {
+              <Button
+                variant='contained'
+                color='secondary'
+                disableElevation={true}
+                sx={{
+                  display: 'block',
+                  width: '64px',
+                  height: '36px',
+                  borderRadius: '5px',
+                  padding: 0,
+                  marginTop: '7px',
+                  marginBottom: '6px'
+                }}
+              >
+                Add
+              </Button>
+            }
+          </div>
+        </li>
       ));
       setUsers(infos);
     }
