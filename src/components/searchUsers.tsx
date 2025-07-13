@@ -8,6 +8,23 @@ import { blue } from '@mui/material/colors';
 export default function SearchUsers(props: {session: Session, friendIds: number[]}) {
   const [users, setUsers] = useState<React.ReactNode[]>([]);
 
+  const addFriend = async (id: number, friendId: number) => {
+    const res = await fetch('/api/addFriend', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ id, friendId }),
+    });
+
+    if (!res.ok) return null;
+    const json: number = await res.json();
+    if (json === 0)
+      return null;
+    else
+      return json;
+  };
+
   const searchUsers = async (name: string) => {
     name = name.trim();
     if (!name) {
@@ -34,6 +51,7 @@ export default function SearchUsers(props: {session: Session, friendIds: number[
                 color='secondary'
                 disableElevation={true}
                 disabled={props.friendIds.includes(value.id as unknown as number)}
+                onClick={() => addFriend(props.session.user.id as unknown as number, value.id as unknown as number)}
                 sx={{
                   display: 'block',
                   width: '64px',
