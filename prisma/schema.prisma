@@ -14,9 +14,27 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model user {
+model User {
   id        Int     @id @default(autoincrement())
   userid    String  @unique
   name      String
   password  String
+
+  friends   Friend[] @relation("UserFriends")
+  friendOf  Friend[] @relation("FriendOfUsers")
+
+  @@map("user")
+}
+
+model Friend {
+  id          Int
+  friend_id   Int
+  createdAt   DateTime  @default(now())
+  lastReached DateTime  @default(now()) @updatedAt
+
+  user        User @relation("UserFriends", fields: [id], references: [id])
+  friend      User @relation("FriendOfUsers", fields: [friend_id], references: [id])
+
+  @@id([id, friend_id], name: "friend_pk")
+  @@map("friend")
 }
