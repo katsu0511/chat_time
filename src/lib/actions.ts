@@ -31,3 +31,25 @@ export async function createUser(data: {name: string, userid: string, password: 
     }
   }
 }
+
+export async function addFriend(id: number, friend_id: number) {
+  const friendStatus = await prisma.friend.findFirst({
+    where: {
+      OR: [
+        { id: id, friend_id: friend_id },
+        { id: friend_id, friend_id: id }
+      ]
+    }
+  });
+
+  if (friendStatus) return 0;
+
+  const rows = await prisma.friend.createMany({
+    data: [
+      { id: id, friend_id: friend_id },
+      { id: friend_id, friend_id: id }
+    ],
+    skipDuplicates: true
+  });
+  return rows.count;
+}

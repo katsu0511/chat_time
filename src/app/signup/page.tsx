@@ -4,12 +4,6 @@ import SignupForm from '@/components/SignupForm';
 
 export default async function Signup() {
   const session = await getAuthSession();
-
-  if (session) {
-    redirect('/');
-  }
-
-  return (
-    <SignupForm />
-  );
+  if (session) redirect('/');
+  return <SignupForm />;
 }
