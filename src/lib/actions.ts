@@ -4,14 +4,14 @@ import { Prisma } from '@/generated/prisma';
 import prisma from './prisma';
 import hashedPassword from './hashPassword';
 
-export async function createUser(data: {name: string, userid: string, password: string}) {
+export async function createUser(data: {name: string, userId: string, password: string}) {
   try {
     data.password = await hashedPassword(data.password);
     const user = await prisma.user.create({
       data,
       select: {
         id: true,
-        userid: true,
+        userId: true,
         name: true
       }
     });
@@ -32,12 +32,12 @@ export async function createUser(data: {name: string, userid: string, password: 
   }
 }
 
-export async function addFriend(id: number, friend_id: number) {
+export async function addFriend(id: number, friendId: number) {
   const friendStatus = await prisma.friend.findFirst({
     where: {
       OR: [
-        { id: id, friend_id: friend_id },
-        { id: friend_id, friend_id: id }
+        { id: id, friendId: friendId },
+        { id: friendId, friendId: id }
       ]
     }
   });
@@ -46,8 +46,8 @@ export async function addFriend(id: number, friend_id: number) {
 
   const rows = await prisma.friend.createMany({
     data: [
-      { id: id, friend_id: friend_id },
-      { id: friend_id, friend_id: id }
+      { id: id, friendId: friendId },
+      { id: friendId, friendId: id }
     ],
     skipDuplicates: true
   });
