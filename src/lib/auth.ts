@@ -3,14 +3,14 @@ import { signIn } from 'next-auth/react';
 import { createUser } from './actions';
 
 export const handleLogin = async (
-  userid: string,
+  userId: string,
   password: string,
   router: AppRouterInstance,
   setError: (error: string) => void
 ) => {
   const res = await signIn('credentials', {
     redirect: false,
-    userid,
+    userId,
     password,
   });
 
@@ -23,15 +23,15 @@ export const handleLogin = async (
 
 export const handleSignup = async (
   name: string,
-  userid: string,
+  userId: string,
   password: string,
   router: AppRouterInstance,
   setError: (error: string) => void
 ) => {
-  const user = await createUser({name, userid, password});
+  const user = await createUser({name, userId, password});
   if (typeof user === 'string') {
     setError(user);
     return null;
   }
-  handleLogin(userid, password, router, setError);
+  handleLogin(userId, password, router, setError);
 };
