@@ -58,3 +58,22 @@ export async function getFriendIds(id: number): Promise<number[]> {
 
   return friendIds.map((f) => f.friendId);
 }
+
+export async function getFriends(id: number): Promise<User[]> {
+  const friendIds = await prisma.friend.findMany({
+    where: {
+      id: id
+    },
+    include: {
+      friend: true
+    }
+  });
+
+  const friends: User[] = friendIds.map(friend => ({
+    id: friend.friendId as unknown as string,
+    userId: friend.friend.userId,
+    name: friend.friend.name
+  }));
+
+  return friends;
+}
