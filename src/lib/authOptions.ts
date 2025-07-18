@@ -9,16 +9,16 @@ export const authOptions = {
     CredentialsProvider({
       name: 'Credentials',
       credentials: {
-        userid: { label: 'UserID', type: 'text', placeholder: 'User ID' },
+        userId: { label: 'UserID', type: 'text', placeholder: 'User ID' },
         password: { label: 'Password', type: 'password', placeholder: 'Password' }
       },
-      async authorize(credentials: Record<'userid' | 'password', string> | undefined) {
+      async authorize(credentials: Record<'userId' | 'password', string> | undefined) {
         if (!credentials) return null;
-        const user = await getUserForLogin(credentials.userid);
+        const user = await getUserForLogin(credentials.userId);
         if (!user) return null;
         const isValid = await compare(credentials.password, user.password);
         if (!isValid) return null;
-        return await getUser(credentials.userid, user.password);
+        return await getUser(credentials.userId, user.password);
       },
     }),
   ],
