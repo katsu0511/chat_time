@@ -77,3 +77,22 @@ export async function getFriends(id: number): Promise<User[]> {
 
   return friends;
 }
+
+export async function getMessages(senderId: number, receiverId: number) {
+  const messages = await prisma.message.findMany({
+    where: {
+      senderId,
+      receiverId
+    },
+    orderBy: {
+      createdAt: 'asc'
+    },
+    select: {
+      messageId: true,
+      content: true,
+      createdAt: true
+    }
+  });
+
+  return messages;
+}
