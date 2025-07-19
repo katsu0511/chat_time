@@ -5,15 +5,17 @@ import { useState, useEffect } from 'react';
 import SendMessage from './SendMessage';
 
 type Messages = {
-  messageId: number,
-  content: string;
-  createdAt: Date;
+  messageId: number
+  senderId: number
+  receiverId: number
+  content: string
+  createdAt: Date
 };
 
 export default function SearchUsers({session}: {session: Session}) {
   const [friends, setFriends] = useState<React.ReactNode[]>([]);
   const [messages, setMessages] = useState<React.ReactNode[]>([]);
-  const [receiverId, setReceiverId] = useState<number>();
+  const [friendId, setFriendId] = useState<number>();
 
   useEffect(() => {
     const getFriends = async () => {
@@ -31,9 +33,9 @@ export default function SearchUsers({session}: {session: Session}) {
       setFriends(friends);
     };
 
-    const getMessages = async (receiverId: number) => {
-      setReceiverId(receiverId);
-      const res = await fetch(`/api/getMessages?senderId=${session.user.id}&receiverId=${receiverId}`);
+    const getMessages = async (friendId: number) => {
+      setFriendId(friendId);
+      const res = await fetch(`/api/getMessages?id=${session.user.id}&friendId=${friendId}`);
       if (!res.ok) setMessages([]);
       const json: Messages[] = await res.json();
       const contents = json.map(content => <div key={content.messageId}>{content.content} at {content.createdAt as unknown as string}</div>);
@@ -50,7 +52,7 @@ export default function SearchUsers({session}: {session: Session}) {
       </div>
       <div className='w-7/10 h-full'>
         <div className='bg-blue-100 w-full h-19/20'>{messages}</div>
-        <SendMessage senderId={session.user.id as unknown as number} receiverId={receiverId} />
+        <SendMessage senderId={session.user.id as unknown as number} receiverId={friendId} />
       </div>
     </div>
   );
