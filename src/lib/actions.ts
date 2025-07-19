@@ -53,3 +53,14 @@ export async function addFriend(id: number, friendId: number) {
   });
   return rows.count;
 }
+
+export async function sendMessage(senderId: number, receiverId: number, content: string) {
+  const message = await prisma.message.create({
+    data: {
+      senderId,
+      receiverId,
+      content
+    }
+  });
+  return message;
+}
