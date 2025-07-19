@@ -41,7 +41,7 @@ export default function SearchUsers(props: {session: Session, friendIds: number[
         <li key={value.id} className='flex w-[400px] h-[50px] mx-auto my-0 border-blue-500 border-b-1'>
           <div className='w-[328px] h-full text-left px-2'>
             <p className='text-xl w-full h-[25px]'>{value.name}</p>
-            <p className='text-sm w-full h-[24px] leading-6'>{value.userid}</p>
+            <p className='text-sm w-full h-[24px] leading-6'>{value.userId}</p>
           </div>
           <div className='w-[72px] h-full pr-2'>
             {

@@ -1,10 +1,10 @@
 import prisma from './prisma';
 import type { User } from 'next-auth';
 
-export async function getUser(userid: string, password: string): Promise<User | null> {
+export async function getUser(userId: string, password: string): Promise<User | null> {
   const userInfo = await prisma.user.findUnique({
     where: {
-      userid: userid,
+      userId: userId,
       password: password
     }
   });
@@ -13,15 +13,15 @@ export async function getUser(userid: string, password: string): Promise<User | 
 
   return {
     id: userInfo.id as unknown as string,
-    userid: userInfo.userid,
+    userId: userInfo.userId,
     name: userInfo.name
   }
 }
 
-export async function getUserForLogin(userid: string) {
+export async function getUserForLogin(userId: string) {
   const userInfo = await prisma.user.findUnique({
     where: {
-      userid: userid
+      userId: userId
     }
   });
   return userInfo;
@@ -32,14 +32,14 @@ export async function getUsers(name: string): Promise<User[]> {
     where: {
       OR: [
         { name: { contains: name } },
-        { userid: { contains: name } }
+        { userId: { contains: name } }
       ]
     }
   });
 
   const users: User[] = userInfos.map(value => ({
     id: value.id as unknown as string,
-    userid: value.userid,
+    userId: value.userId,
     name: value.name
   }));
 
@@ -52,9 +52,47 @@ export async function getFriendIds(id: number): Promise<number[]> {
       id: id
     },
     select: {
-      friend_id: true
+      friendId: true
     }
   });
 
-  return friendIds.map((f) => f.friend_id);
+  return friendIds.map((f) => f.friendId);
+}
+
+export async function getFriends(id: number): Promise<User[]> {
+  const friendIds = await prisma.friend.findMany({
+    where: {
+      id: id
+    },
+    include: {
+      friend: true
+    }
+  });
+
+  const friends: User[] = friendIds.map(friend => ({
+    id: friend.friendId as unknown as string,
+    userId: friend.friend.userId,
+    name: friend.friend.name
+  }));
+
+  return friends;
+}
+
+export async function getMessages(senderId: number, receiverId: number) {
+  const messages = await prisma.message.findMany({
+    where: {
+      senderId,
+      receiverId
+    },
+    orderBy: {
+      createdAt: 'asc'
+    },
+    select: {
+      messageId: true,
+      content: true,
+      createdAt: true
+    }
+  });
+
+  return messages;
 }

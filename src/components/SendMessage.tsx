@@ -1,18 +1,33 @@
 'use client';
 
-import { useContext } from 'react';
+import { useState, useContext } from 'react';
 import { ThemeContext } from '@/components/ThemeProviderWrapper';
 import { Input, Button } from '@mui/material';
 
-export default function SendMessage() {
+export default function SendMessage(props: {senderId: number, receiverId: number | undefined}) {
+  const [message, setMessage] = useState('');
   const context = useContext(ThemeContext);
   if (!context) return null;
   const { theme } = context;
+
+  const sendMessage = async (senderId: number, receiverId: number | undefined, content: string) => {
+    const res = await fetch('/api/sendMessage', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ senderId, receiverId, content }),
+    });
+
+    if (!res.ok) return null;
+  };
 
   return (
     <div className='flex w-full h-1/20'>
       <Input
         disableUnderline
+        disabled={ props.receiverId == undefined }
+        onChange={(e) => setMessage(e.target.value)}
         sx={{
           display: 'block',
           width: '90%',
@@ -35,6 +50,8 @@ export default function SendMessage() {
         variant='contained'
         color='secondary'
         disableElevation={true}
+        disabled={ props.receiverId == undefined }
+        onClick={() => sendMessage(props.senderId, props.receiverId, message)}
         sx={{
           display: 'block',
           width: '10%',
