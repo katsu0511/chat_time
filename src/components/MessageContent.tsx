@@ -1,4 +1,4 @@
-import dayjs from "dayjs";
+import dayjs from 'dayjs';
 
 export default function MessageContent(props: {id: number, message: Message}) {
   const datetime = dayjs(props.message.createdAt).format('YYYY/MM/DD HH:mm');
