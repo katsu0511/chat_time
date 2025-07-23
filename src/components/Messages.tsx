@@ -1,21 +1,23 @@
 'use client';
 
 import type { Session, User } from 'next-auth';
-import { useState, useEffect } from 'react';
+import { useState, useCallback, useEffect } from 'react';
+import MessageContent from './MessageContent';
 import SendMessage from './SendMessage';
-
-type Messages = {
-  messageId: number
-  senderId: number
-  receiverId: number
-  content: string
-  createdAt: Date
-};
 
 export default function SearchUsers({session}: {session: Session}) {
   const [friends, setFriends] = useState<React.ReactNode[]>([]);
   const [messages, setMessages] = useState<React.ReactNode[]>([]);
   const [friendId, setFriendId] = useState<number>();
+
+  const getMessages = useCallback(async (friendId: number) => {
+    setFriendId(friendId);
+    const res = await fetch(`/api/getMessages?id=${session.user.id}&friendId=${friendId}`);
+    if (!res.ok) setMessages([]);
+    const json: Message[] = await res.json();
+    const contents = json.map(message => <MessageContent key={message.messageId} id={session.user.id as unknown as number} message={message} />);
+    setMessages(contents);
+  }, [session.user.id]);
 
   useEffect(() => {
     const getFriends = async () => {
@@ -33,17 +35,8 @@ export default function SearchUsers({session}: {session: Session}) {
       setFriends(friends);
     };
 
-    const getMessages = async (friendId: number) => {
-      setFriendId(friendId);
-      const res = await fetch(`/api/getMessages?id=${session.user.id}&friendId=${friendId}`);
-      if (!res.ok) setMessages([]);
-      const json: Messages[] = await res.json();
-      const contents = json.map(content => <div key={content.messageId}>{content.content} at {content.createdAt as unknown as string}</div>);
-      setMessages(contents);
-    };
-
     getFriends();
-  }, [session.user.id]);
+  }, [session.user.id, getMessages]);
 
   return (
     <div className='flex w-full h-full border-blue-500 border-x-4'>
