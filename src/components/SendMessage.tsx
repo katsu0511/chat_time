@@ -4,7 +4,7 @@ import { useState, useContext } from 'react';
 import { ThemeContext } from '@/components/ThemeProviderWrapper';
 import { Input, Button } from '@mui/material';
 
-export default function SendMessage(props: {senderId: number, receiverId: number | undefined}) {
+export default function SendMessage(props: {senderId: number, receiverId: number | undefined, onSent?: () => void}) {
   const [message, setMessage] = useState('');
   const context = useContext(ThemeContext);
   if (!context) return null;
@@ -20,6 +20,8 @@ export default function SendMessage(props: {senderId: number, receiverId: number
     });
 
     if (!res.ok) return null;
+    setMessage('');
+    props.onSent?.();
   };
 
   return (

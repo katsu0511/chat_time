@@ -45,7 +45,7 @@ export default function SearchUsers({session}: {session: Session}) {
       </div>
       <div className='w-7/10 h-full'>
         <div className='bg-blue-100 w-full h-19/20'>{messages}</div>
-        <SendMessage senderId={session.user.id as unknown as number} receiverId={friendId} />
+        <SendMessage senderId={session.user.id as unknown as number} receiverId={friendId} onSent={() => friendId && getMessages(friendId)} />
       </div>
     </div>
   );
