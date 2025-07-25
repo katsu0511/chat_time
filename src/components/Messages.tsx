@@ -38,6 +38,15 @@ export default function SearchUsers({session}: {session: Session}) {
     getFriends();
   }, [session.user.id, getMessages]);
 
+  useEffect(() => {
+    if (!friendId) return;
+    const interval = setInterval(() => {
+      getMessages(friendId);
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, [friendId, getMessages]);
+
   return (
     <div className='flex w-full h-full border-blue-500 border-x-4'>
       <div className='w-3/10 h-full'>
