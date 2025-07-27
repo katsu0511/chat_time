@@ -5,7 +5,7 @@ import { useState, useCallback, useEffect } from 'react';
 import MessageContent from './MessageContent';
 import SendMessage from './SendMessage';
 
-export default function SearchUsers({session}: {session: Session}) {
+export default function Messages({session}: {session: Session}) {
   const [friends, setFriends] = useState<React.ReactNode[]>([]);
   const [messages, setMessages] = useState<React.ReactNode[]>([]);
   const [friendId, setFriendId] = useState<number>();
