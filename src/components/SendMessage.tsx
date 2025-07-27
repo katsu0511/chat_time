@@ -11,6 +11,9 @@ export default function SendMessage(props: {senderId: number, receiverId: number
   const { theme } = context;
 
   const sendMessage = async (senderId: number, receiverId: number | undefined, content: string) => {
+    content = content.trim();
+    if (!content) return;
+
     const res = await fetch('/api/sendMessage', {
       method: 'POST',
       headers: {
