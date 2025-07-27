@@ -32,6 +32,7 @@ export default function SendMessage(props: {senderId: number, receiverId: number
       <Input
         disableUnderline
         disabled={ props.receiverId == undefined }
+        value={message}
         onChange={(e) => setMessage(e.target.value)}
         sx={{
           display: 'block',
