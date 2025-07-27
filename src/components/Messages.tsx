@@ -66,7 +66,11 @@ export default function Messages({session}: {session: Session}) {
             <MessageContent key={message.messageId} id={session.user.id as unknown as number} message={message} />
           ))}
         </div>
-        <SendMessage senderId={session.user.id as unknown as number} receiverId={friendId} onSent={() => friendId && getMessages(friendId)} />
+        {
+          friendId === undefined
+          ? <div className='bg-blue-100 w-full h-10'></div>
+          : <SendMessage senderId={session.user.id as unknown as number} receiverId={friendId} onSent={() => friendId && getMessages(friendId)} />
+        }
       </div>
     </div>
   );
