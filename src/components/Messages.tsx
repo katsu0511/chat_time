@@ -1,7 +1,7 @@
 'use client';
 
 import type { Session, User } from 'next-auth';
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import MessageContent from './MessageContent';
 import SendMessage from './SendMessage';
 
@@ -9,6 +9,7 @@ export default function Messages({session}: {session: Session}) {
   const [friends, setFriends] = useState<React.ReactNode[]>([]);
   const [messages, setMessages] = useState<React.ReactNode[]>([]);
   const [friendId, setFriendId] = useState<number>();
+  const messageContainerRef = useRef<HTMLDivElement>(null);
 
   const getMessages = useCallback(async (friendId: number) => {
     setFriendId(friendId);
@@ -47,13 +48,20 @@ export default function Messages({session}: {session: Session}) {
     return () => clearInterval(interval);
   }, [friendId, getMessages]);
 
+  useEffect(() => {
+    messageContainerRef.current?.scrollTo({
+      top: messageContainerRef.current.scrollHeight,
+      behavior: 'auto'
+    });
+  }, [messages]);
+
   return (
     <div className='flex w-full h-full border-blue-500 border-x-4'>
       <div className='w-3/10 h-full'>
         <ul>{friends}</ul>
       </div>
       <div className='w-7/10 h-full'>
-        <div className='bg-blue-100 w-full h-19/20'>{messages}</div>
+        <div ref={messageContainerRef} className='bg-blue-100 w-full h-19/20'>{messages}</div>
         <SendMessage senderId={session.user.id as unknown as number} receiverId={friendId} onSent={() => friendId && getMessages(friendId)} />
       </div>
     </div>
