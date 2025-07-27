@@ -1,4 +1,4 @@
-import type { Session, User } from 'next-auth';
+import type { User } from 'next-auth';
 import { Button } from '@mui/material';
 
 const addFriend = async (id: number, friendId: number) => {
@@ -18,7 +18,7 @@ const addFriend = async (id: number, friendId: number) => {
     return json;
 };
 
-export default function UserList(props: {user: User, session: Session, friendIds: number[]}) {
+export default function UserList(props: {user: User, myId: string, friendIds: number[]}) {
   return (
     <li key={props.user.id} className='w-full max-w-100 h-[50px] mx-auto px-5 my-0'>
       <div className='flex w-full h-full border-blue-500 border-b-1'>
@@ -28,13 +28,13 @@ export default function UserList(props: {user: User, session: Session, friendIds
         </div>
         <div className='w-18 h-full pr-2'>
           {
-            props.user.id != props.session.user.id &&
+            props.user.id != props.myId &&
             <Button
               variant='contained'
               color='secondary'
               disableElevation={true}
               disabled={props.friendIds.includes(props.user.id as unknown as number)}
-              onClick={() => addFriend(props.session.user.id as unknown as number, props.user.id as unknown as number)}
+              onClick={() => addFriend(props.myId as unknown as number, props.user.id as unknown as number)}
               sx={{
                 display: 'block',
                 width: '64px',

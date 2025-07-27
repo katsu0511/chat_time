@@ -53,7 +53,7 @@ export default function SearchUsers(props: {session: Session, friendIds: number[
       />
       <ul className='block text-center py-10'>
         {users.map(user => (
-            <UserList key={user.id} user={user} session={props.session} friendIds={props.friendIds} />
+            <UserList key={user.id} user={user} myId={props.session.user.id} friendIds={props.friendIds} />
         ))}
       </ul>
     </div>
