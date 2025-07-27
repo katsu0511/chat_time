@@ -2,28 +2,12 @@
 
 import { useState } from 'react';
 import type { Session, User } from 'next-auth';
-import { Button, Input } from '@mui/material';
+import { Input } from '@mui/material';
 import { blue } from '@mui/material/colors';
+import UserList from './UserList';
 
 export default function SearchUsers(props: {session: Session, friendIds: number[]}) {
-  const [users, setUsers] = useState<React.ReactNode[]>([]);
-
-  const addFriend = async (id: number, friendId: number) => {
-    const res = await fetch('/api/addFriend', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ id, friendId }),
-    });
-
-    if (!res.ok) return null;
-    const json: number = await res.json();
-    if (json === 0)
-      return null;
-    else
-      return json;
-  };
+  const [users, setUsers] = useState<User[]>([]);
 
   const searchUsers = async (name: string) => {
     name = name.trim();
@@ -36,41 +20,8 @@ export default function SearchUsers(props: {session: Session, friendIds: number[
     if (!res.ok)
       setUsers([]);
     else {
-      const json: User[] = await res.json();
-      const infos = json.map(value => (
-        <li key={value.id} className='w-full max-w-100 h-[50px] mx-auto px-5 my-0'>
-          <div className='flex w-full h-full border-blue-500 border-b-1'>
-            <div className='w-[calc(100%-72px)] max-w-82 h-full text-left px-2'>
-              <p className='text-xl w-full h-[25px]'>{value.name}</p>
-              <p className='text-sm w-full h-6 leading-6'>{value.userId}</p>
-            </div>
-            <div className='w-18 h-full pr-2'>
-              {
-                value.id != props.session.user.id &&
-                <Button
-                  variant='contained'
-                  color='secondary'
-                  disableElevation={true}
-                  disabled={props.friendIds.includes(value.id as unknown as number)}
-                  onClick={() => addFriend(props.session.user.id as unknown as number, value.id as unknown as number)}
-                  sx={{
-                    display: 'block',
-                    width: '64px',
-                    height: '36px',
-                    borderRadius: '5px',
-                    padding: 0,
-                    marginTop: '7px',
-                    marginBottom: '6px'
-                  }}
-                >
-                  {props.friendIds.includes(value.id as unknown as number) ? 'Friend' : 'Add'}
-                </Button>
-              }
-            </div>
-          </div>
-        </li>
-      ));
-      setUsers(infos);
+      const users: User[] = await res.json();
+      setUsers(users);
     }
   };
 
@@ -100,7 +51,11 @@ export default function SearchUsers(props: {session: Session, friendIds: number[
         }}
         onChange={(e) => searchUsers(e.target.value)}
       />
-      <ul className='block text-center py-10'>{users}</ul>
+      <ul className='block text-center py-10'>
+        {users.map(user => (
+            <UserList key={user.id} user={user} session={props.session} friendIds={props.friendIds} />
+        ))}
+      </ul>
     </div>
   );
 }
