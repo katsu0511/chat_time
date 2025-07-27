@@ -4,13 +4,16 @@ import { useState, useContext } from 'react';
 import { ThemeContext } from '@/components/ThemeProviderWrapper';
 import { Input, Button } from '@mui/material';
 
-export default function SendMessage(props: {senderId: number, receiverId: number | undefined}) {
+export default function SendMessage(props: {senderId: number, receiverId: number | undefined, onSent?: () => void}) {
   const [message, setMessage] = useState('');
   const context = useContext(ThemeContext);
   if (!context) return null;
   const { theme } = context;
 
   const sendMessage = async (senderId: number, receiverId: number | undefined, content: string) => {
+    content = content.trim();
+    if (!content) return;
+
     const res = await fetch('/api/sendMessage', {
       method: 'POST',
       headers: {
@@ -20,17 +23,20 @@ export default function SendMessage(props: {senderId: number, receiverId: number
     });
 
     if (!res.ok) return null;
+    setMessage('');
+    props.onSent?.();
   };
 
   return (
-    <div className='flex w-full h-1/20'>
+    <div className='flex w-full h-10'>
       <Input
         disableUnderline
         disabled={ props.receiverId == undefined }
+        value={message}
         onChange={(e) => setMessage(e.target.value)}
         sx={{
           display: 'block',
-          width: '90%',
+          width: 'calc(100% - 80px)',
           height: '100%'
         }}
         inputProps={{
@@ -50,11 +56,11 @@ export default function SendMessage(props: {senderId: number, receiverId: number
         variant='contained'
         color='secondary'
         disableElevation={true}
-        disabled={ props.receiverId == undefined }
+        disabled={ props.receiverId == undefined || message.trim() == '' }
         onClick={() => sendMessage(props.senderId, props.receiverId, message)}
         sx={{
           display: 'block',
-          width: '10%',
+          width: '80px',
           height: '100%',
           borderRadius: '0'
         }}

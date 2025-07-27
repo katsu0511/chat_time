@@ -1,19 +1,24 @@
 'use client';
 
 import type { Session, User } from 'next-auth';
-import { useState, useEffect } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
+import MessageContent from './MessageContent';
 import SendMessage from './SendMessage';
 
-type Messages = {
-  messageId: number,
-  content: string;
-  createdAt: Date;
-};
-
-export default function SearchUsers({session}: {session: Session}) {
+export default function Messages({session}: {session: Session}) {
   const [friends, setFriends] = useState<React.ReactNode[]>([]);
-  const [messages, setMessages] = useState<React.ReactNode[]>([]);
-  const [receiverId, setReceiverId] = useState<number>();
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [friendId, setFriendId] = useState<number>();
+  const messageContainerRef = useRef<HTMLDivElement>(null);
+
+  const getMessages = useCallback(async (friendId: number) => {
+    setFriendId(friendId);
+    const res = await fetch(`/api/getMessages?id=${session.user.id}&friendId=${friendId}`);
+    if (!res.ok) setMessages([]);
+    const contents: Message[] = await res.json();
+    const isSame = contents.length === messages.length && contents.every((m, i) => m.messageId === messages[i]?.messageId);
+    if (!isSame) setMessages(contents);
+  }, [session.user.id, messages]);
 
   useEffect(() => {
     const getFriends = async () => {
@@ -22,7 +27,7 @@ export default function SearchUsers({session}: {session: Session}) {
       const json: User[] = await res.json();
       const friends = json.map(friend => (
         <li key={friend.id} className='w-full h-[96px]'>
-          <button className='w-full h-full p-2 cursor-pointer duration-300 hover:bg-blue-300 hover:shadow-xl' onClick={() => getMessages(Number(friend.id))}>
+          <button className={`w-full h-full p-2 cursor-pointer duration-300 ${friendId === Number(friend.id) && 'bg-blue-300 shadow-xl'} hover:bg-blue-300 hover:shadow-xl`} onClick={() => getMessages(Number(friend.id))}>
             <p className='w-full h-1/2 text-2xl leading-[40px] text-left'>{friend.name}</p>
             <p className='w-full h-1/2 text-lg leading-[40px] text-left'>{friend.userId}</p>
           </button>
@@ -31,26 +36,41 @@ export default function SearchUsers({session}: {session: Session}) {
       setFriends(friends);
     };
 
-    const getMessages = async (receiverId: number) => {
-      setReceiverId(receiverId);
-      const res = await fetch(`/api/getMessages?senderId=${session.user.id}&receiverId=${receiverId}`);
-      if (!res.ok) setMessages([]);
-      const json: Messages[] = await res.json();
-      const contents = json.map(content => <div key={content.messageId}>{content.content} at {content.createdAt as unknown as string}</div>);
-      setMessages(contents);
-    };
-
     getFriends();
-  }, [session.user.id]);
+  }, [session.user.id, friendId, getMessages]);
+
+  useEffect(() => {
+    if (!friendId) return;
+    const interval = setInterval(() => {
+      getMessages(friendId);
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, [friendId, getMessages]);
+
+  useEffect(() => {
+    messageContainerRef.current?.scrollTo({
+      top: messageContainerRef.current.scrollHeight,
+      behavior: 'auto'
+    });
+  }, [messages]);
 
   return (
-    <div className='flex w-full h-full border-blue-500 border-x-4'>
+    <div className='flex w-full h-full md:border-blue-500 md:border-x-4'>
       <div className='w-3/10 h-full'>
         <ul>{friends}</ul>
       </div>
       <div className='w-7/10 h-full'>
-        <div className='bg-blue-100 w-full h-19/20'>{messages}</div>
-        <SendMessage senderId={session.user.id as unknown as number} receiverId={receiverId} />
+        <div ref={messageContainerRef} className='bg-blue-100 w-full h-[calc(100%-40px)] overflow-y-auto'>
+          {messages.map(message => (
+            <MessageContent key={message.messageId} id={session.user.id as unknown as number} message={message} />
+          ))}
+        </div>
+        {
+          friendId === undefined
+          ? <div className='bg-blue-100 w-full h-10'></div>
+          : <SendMessage senderId={session.user.id as unknown as number} receiverId={friendId} onSent={() => friendId && getMessages(friendId)} />
+        }
       </div>
     </div>
   );

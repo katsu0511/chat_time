@@ -15,12 +15,14 @@ export default function SignupForm() {
   };
 
   return (
-    <form className='w-full pt-60' onSubmit={signup}>
-      <Input label='Name' type='text' value={name} onChange={(e) => setName(e.target.value)}/>
-      <Input label='User ID' type='text' value={userid} onChange={(e) => setUserid(e.target.value)} />
-      <Input label='Password' type='password' value={password} onChange={(e) => setPassword(e.target.value)}/>
-      <Button usage='Signup' error={error} />
-      <PageLink usage='login' />
-    </form>
+    <div className='flex items-center w-full h-full'>
+      <form className='w-full' onSubmit={signup}>
+        <Input label='Name' type='text' value={name} onChange={(e) => setName(e.target.value)}/>
+        <Input label='User ID' type='text' value={userid} onChange={(e) => setUserid(e.target.value)} />
+        <Input label='Password' type='password' value={password} onChange={(e) => setPassword(e.target.value)}/>
+        <Button usage='Signup' error={error} />
+        <PageLink usage='login' />
+      </form>
+    </div>
   );
 }

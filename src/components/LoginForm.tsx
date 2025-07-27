@@ -15,11 +15,13 @@ export default function LoginForm() {
   };
 
   return (
-    <form className='w-full pt-60' onSubmit={login}>
-      <Input label='User ID' type='text' value={userid} onChange={(e) => setUserid(e.target.value)} />
-      <Input label='Password' type='password' value={password} onChange={(e) => setPassword(e.target.value)}/>
-      <Button usage='Login' error={error} />
-      <PageLink usage='signup' />
-    </form>
+    <div className='flex items-center w-full h-full'>
+      <form className='w-full' onSubmit={login}>
+        <Input label='User ID' type='text' value={userid} onChange={(e) => setUserid(e.target.value)} />
+        <Input label='Password' type='password' value={password} onChange={(e) => setPassword(e.target.value)}/>
+        <Button usage='Login' error={error} />
+        <PageLink usage='signup' />
+      </form>
+    </div>
   );
 }
