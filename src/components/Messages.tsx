@@ -16,8 +16,9 @@ export default function Messages({session}: {session: Session}) {
     const res = await fetch(`/api/getMessages?id=${session.user.id}&friendId=${friendId}`);
     if (!res.ok) setMessages([]);
     const contents: Message[] = await res.json();
-    setMessages(contents);
-  }, [session.user.id]);
+    const isSame = contents.length === messages.length && contents.every((m, i) => m.messageId === messages[i]?.messageId);
+    if (!isSame) setMessages(contents);
+  }, [session.user.id, messages]);
 
   useEffect(() => {
     const getFriends = async () => {
