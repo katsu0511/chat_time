@@ -55,12 +55,12 @@ export default function Messages({session}: {session: Session}) {
   }, [messages]);
 
   return (
-    <div className='flex w-full h-full border-blue-500 border-x-4'>
+    <div className='flex w-full h-full md:border-blue-500 md:border-x-4'>
       <div className='w-3/10 h-full'>
         <ul>{friends}</ul>
       </div>
       <div className='w-7/10 h-full'>
-        <div ref={messageContainerRef} className='bg-blue-100 w-full h-19/20'>
+        <div ref={messageContainerRef} className='bg-blue-100 w-full h-[calc(100%-40px)] overflow-y-auto'>
           {messages.map(message => (
             <MessageContent key={message.messageId} id={session.user.id as unknown as number} message={message} />
           ))}
