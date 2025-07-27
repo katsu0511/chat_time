@@ -56,7 +56,7 @@ export default function SendMessage(props: {senderId: number, receiverId: number
         variant='contained'
         color='secondary'
         disableElevation={true}
-        disabled={ props.receiverId == undefined }
+        disabled={ props.receiverId == undefined || message.trim() == '' }
         onClick={() => sendMessage(props.senderId, props.receiverId, message)}
         sx={{
           display: 'block',
