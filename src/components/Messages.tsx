@@ -7,7 +7,7 @@ import SendMessage from './SendMessage';
 
 export default function Messages({session}: {session: Session}) {
   const [friends, setFriends] = useState<React.ReactNode[]>([]);
-  const [messages, setMessages] = useState<React.ReactNode[]>([]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [friendId, setFriendId] = useState<number>();
   const messageContainerRef = useRef<HTMLDivElement>(null);
 
@@ -15,8 +15,7 @@ export default function Messages({session}: {session: Session}) {
     setFriendId(friendId);
     const res = await fetch(`/api/getMessages?id=${session.user.id}&friendId=${friendId}`);
     if (!res.ok) setMessages([]);
-    const json: Message[] = await res.json();
-    const contents = json.map(message => <MessageContent key={message.messageId} id={session.user.id as unknown as number} message={message} />);
+    const contents: Message[] = await res.json();
     setMessages(contents);
   }, [session.user.id]);
 
@@ -61,7 +60,11 @@ export default function Messages({session}: {session: Session}) {
         <ul>{friends}</ul>
       </div>
       <div className='w-7/10 h-full'>
-        <div ref={messageContainerRef} className='bg-blue-100 w-full h-19/20'>{messages}</div>
+        <div ref={messageContainerRef} className='bg-blue-100 w-full h-19/20'>
+          {messages.map(message => (
+            <MessageContent key={message.messageId} id={session.user.id as unknown as number} message={message} />
+          ))}
+        </div>
         <SendMessage senderId={session.user.id as unknown as number} receiverId={friendId} onSent={() => friendId && getMessages(friendId)} />
       </div>
     </div>
