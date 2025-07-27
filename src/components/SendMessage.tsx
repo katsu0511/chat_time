@@ -28,14 +28,14 @@ export default function SendMessage(props: {senderId: number, receiverId: number
   };
 
   return (
-    <div className='flex w-full h-1/20'>
+    <div className='flex w-full h-10'>
       <Input
         disableUnderline
         disabled={ props.receiverId == undefined }
         onChange={(e) => setMessage(e.target.value)}
         sx={{
           display: 'block',
-          width: '90%',
+          width: 'calc(100% - 80px)',
           height: '100%'
         }}
         inputProps={{
@@ -59,7 +59,7 @@ export default function SendMessage(props: {senderId: number, receiverId: number
         onClick={() => sendMessage(props.senderId, props.receiverId, message)}
         sx={{
           display: 'block',
-          width: '10%',
+          width: '80px',
           height: '100%',
           borderRadius: '0'
         }}
