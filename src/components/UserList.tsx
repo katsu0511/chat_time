@@ -10,7 +10,7 @@ export default function UserList(props: {user: User, myId: string, friendIds: nu
 
   return (
     <li key={props.user.id} className='w-full max-w-100 h-[50px] mx-auto px-5 my-0'>
-      <div className='flex w-full h-full border-blue-500 border-b-1'>
+      <div className='flex w-full h-full border-[color:var(--color-primary)] border-b-1'>
         <div className='w-[calc(100%-72px)] max-w-82 h-full text-left px-2'>
           <p className='text-xl w-full h-[25px]'>{props.user.name}</p>
           <p className='text-sm w-full h-6 leading-6'>{props.user.userId}</p>
@@ -26,6 +26,7 @@ export default function UserList(props: {user: User, myId: string, friendIds: nu
               onClick={handleAddFriend}
               sx={{
                 display: 'block',
+                color: 'white',
                 width: '64px',
                 height: '36px',
                 borderRadius: '5px',
