@@ -60,6 +60,7 @@ export default function SendMessage(props: {senderId: number, receiverId: number
         onClick={() => sendMessage(props.senderId, props.receiverId, message)}
         sx={{
           display: 'block',
+          color: 'white',
           width: '80px',
           height: '100%',
           borderRadius: '0'
