@@ -27,7 +27,7 @@ export default function Messages({session}: {session: Session}) {
       const json: User[] = await res.json();
       const friends = json.map(friend => (
         <li key={friend.id} className='w-full h-[96px]'>
-          <button className={`w-full h-full p-2 cursor-pointer duration-300 ${friendId === Number(friend.id) && 'bg-blue-300 shadow-xl'} hover:bg-blue-300 hover:shadow-xl`} onClick={() => getMessages(Number(friend.id))}>
+          <button className={`w-full h-full p-2 cursor-pointer duration-300 ${friendId === Number(friend.id) && 'bg-[color:var(--color-secondary)] shadow-xl'} hover:bg-[color:var(--color-secondary)] hover:shadow-xl`} onClick={() => getMessages(Number(friend.id))}>
             <p className='w-full h-1/2 text-2xl leading-[40px] text-left'>{friend.name}</p>
             <p className='w-full h-1/2 text-lg leading-[40px] text-left'>{friend.userId}</p>
           </button>
@@ -56,19 +56,19 @@ export default function Messages({session}: {session: Session}) {
   }, [messages]);
 
   return (
-    <div className='flex w-full h-full md:border-blue-500 md:border-x-4'>
+    <div className='flex w-full h-full md:border-[color:var(--color-primary)] md:border-x-4'>
       <div className='w-3/10 h-full'>
         <ul>{friends}</ul>
       </div>
       <div className='w-7/10 h-full'>
-        <div ref={messageContainerRef} className='bg-blue-100 w-full h-[calc(100%-40px)] overflow-y-auto'>
+        <div ref={messageContainerRef} className='bg-[color:var(--light-secondary)] w-full h-[calc(100%-40px)] overflow-y-auto'>
           {messages.map(message => (
             <MessageContent key={message.messageId} id={session.user.id as unknown as number} message={message} />
           ))}
         </div>
         {
           friendId === undefined
-          ? <div className='bg-blue-100 w-full h-10'></div>
+          ? <div className='bg-[color:var(--light-secondary)] w-full h-10'></div>
           : <SendMessage senderId={session.user.id as unknown as number} receiverId={friendId} onSent={() => friendId && getMessages(friendId)} />
         }
       </div>
