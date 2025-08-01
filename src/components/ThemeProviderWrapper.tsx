@@ -39,12 +39,12 @@ export function ThemeProviderWrapper({ children }: { children: React.ReactNode }
           ...(mode === 'light'
             ? {
                 primary: { main: blue[500], contrastText: '#000' },
-                secondary: { main: blue[400], light: blue[100], contrastText: '#fff' },
+                secondary: { main: blue[300], light: blue[100] },
                 background: { default: '#fff' }
               }
             : {
                 primary: { main: blue[500], contrastText: '#fff' },
-                secondary: { main: blue[400], light: blue[100], contrastText: '#fff' },
+                secondary: { main: blue[300], light: blue[100] },
                 background: { default: grey[700] }
               }
           ),
@@ -61,6 +61,20 @@ export function ThemeProviderWrapper({ children }: { children: React.ReactNode }
       }),
     [mode]
   );
+
+  useEffect(() => {
+    const root = document.documentElement;
+    const primaryColor = theme.palette.primary.main;
+    const primaryText = theme.palette.primary.contrastText;
+    const secondaryColor = theme.palette.secondary.main;
+    const secondaryLight = theme.palette.secondary.light;
+    const background = theme.palette.background.default;
+    root.style.setProperty('--color-primary', primaryColor);
+    root.style.setProperty('--text-primary', primaryText);
+    root.style.setProperty('--color-secondary', secondaryColor);
+    root.style.setProperty('--light-secondary', secondaryLight);
+    root.style.setProperty('--color-background', background);
+  }, [theme]);
 
   if (!mounted) return null;
 
