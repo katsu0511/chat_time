@@ -8,6 +8,7 @@ import UserList from './UserList';
 
 export default function SearchUsers(props: {session: Session, friendIds: number[]}) {
   const [users, setUsers] = useState<User[]>([]);
+  const [friendIds, setFriendIds] = useState<number[]>(props.friendIds);
 
   const searchUsers = async (name: string) => {
     name = name.trim();
@@ -23,6 +24,10 @@ export default function SearchUsers(props: {session: Session, friendIds: number[
       const users: User[] = await res.json();
       setUsers(users);
     }
+  };
+
+  const handleFriendAdded = (newFriendId: number) => {
+    setFriendIds((prev) => [...prev, newFriendId]);
   };
 
   return (
@@ -53,7 +58,7 @@ export default function SearchUsers(props: {session: Session, friendIds: number[
       />
       <ul className='block text-center py-10'>
         {users.map(user => (
-            <UserList key={user.id} user={user} myId={props.session.user.id} friendIds={props.friendIds} />
+            <UserList key={user.id} user={user} myId={props.session.user.id} friendIds={friendIds} onFriendAdded={handleFriendAdded} />
         ))}
       </ul>
     </div>
