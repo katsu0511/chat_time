@@ -1,24 +1,13 @@
 import type { User } from 'next-auth';
+import { addFriend } from '@/lib/actions';
 import { Button } from '@mui/material';
 
-const addFriend = async (id: number, friendId: number) => {
-  const res = await fetch('/api/addFriend', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ id, friendId }),
-  });
+export default function UserList(props: {user: User, myId: string, friendIds: number[], onFriendAdded: (id: number) => void}) {
+  const handleAddFriend = async () => {
+    const result = await addFriend(Number(props.myId), Number(props.user.id));
+    if (result && props.onFriendAdded) props.onFriendAdded(Number(props.user.id));
+  };
 
-  if (!res.ok) return null;
-  const json: number = await res.json();
-  if (json === 0)
-    return null;
-  else
-    return json;
-};
-
-export default function UserList(props: {user: User, myId: string, friendIds: number[]}) {
   return (
     <li key={props.user.id} className='w-full max-w-100 h-[50px] mx-auto px-5 my-0'>
       <div className='flex w-full h-full border-blue-500 border-b-1'>
@@ -34,7 +23,7 @@ export default function UserList(props: {user: User, myId: string, friendIds: nu
               color='secondary'
               disableElevation={true}
               disabled={props.friendIds.includes(props.user.id as unknown as number)}
-              onClick={() => addFriend(props.myId as unknown as number, props.user.id as unknown as number)}
+              onClick={handleAddFriend}
               sx={{
                 display: 'block',
                 width: '64px',
