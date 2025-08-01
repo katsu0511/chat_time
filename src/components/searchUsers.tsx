@@ -11,19 +11,14 @@ export default function SearchUsers(props: {session: Session, friendIds: number[
   const [friendIds, setFriendIds] = useState<number[]>(props.friendIds);
 
   const searchUsers = async (name: string) => {
-    name = name.trim();
-    if (!name) {
+    if (!name.trim()) {
       setUsers([]);
       return;
     }
-
+    let users: User[] = [];
     const res = await fetch(`/api/getUsersByName?name=${name}`);
-    if (!res.ok)
-      setUsers([]);
-    else {
-      const users: User[] = await res.json();
-      setUsers(users);
-    }
+    if (res.ok) users = await res.json();
+    setUsers(users);
   };
 
   const handleFriendAdded = (newFriendId: number) => {
