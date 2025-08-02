@@ -4,7 +4,7 @@ import { useContext } from 'react';
 import { ThemeContext } from '@/components/ThemeProviderWrapper';
 import { FormControlLabel, RadioGroup, Radio, FormLabel } from '@mui/material';
 
-export default function RadioGroupWrapper() {
+export default function ThemeModeWrapper() {
   const context = useContext(ThemeContext);
   if (!context) return null;
   const { mode, theme, toggleMode } = context;
