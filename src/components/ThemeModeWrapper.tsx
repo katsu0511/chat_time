@@ -10,9 +10,28 @@ export default function ThemeModeWrapper() {
   const { mode, theme, toggleMode } = context;
 
   return (
-    <div className='flex items-center w-full h-100'>
-      <FormLabel component='legend' sx={{ marginRight: 1, color: theme.palette.primary.main }}>Theme: </FormLabel>
-      <RadioGroup name='theme' value={mode} onChange={toggleMode} row>
+    <div className='flex flex-wrap justify-center items-center w-full h-auto my-10'>
+      <FormLabel
+        component='legend'
+        sx={{
+          color: theme.palette.primary.main,
+          width: '100%',
+          textAlign: 'center'
+        }}
+      >
+        Theme
+      </FormLabel>
+      <RadioGroup
+        name='theme'
+        value={mode}
+        onChange={toggleMode}
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          margin: '0 20px'
+        }}
+        row
+      >
         <FormControlLabel value='light' control={<Radio />} label='Light' />
         <FormControlLabel value='dark' control={<Radio />} label='Dark' />
       </RadioGroup>
