@@ -1,35 +1,62 @@
 'use client';
 
+import { ThemeColor, ColorGroup } from '@/lib/themeColor';
 import { createContext, useState, useEffect, useMemo } from 'react';
 import { PaletteMode, Theme, createTheme, ThemeProvider } from '@mui/material/styles';
-import { grey, blue } from '@mui/material/colors';
+import { grey } from '@mui/material/colors';
 import CssBaseline from '@mui/material/CssBaseline';
 
 type ThemeContext = {
   mode: PaletteMode,
+  color: ThemeColor,
+  colors: Color,
   theme: Theme,
-  toggleMode: () => void
-}
+  toggleMode: () => void,
+  toggleColor: (newColor: ThemeColor) => void
+};
 
 export const ThemeContext = createContext<ThemeContext | undefined>(undefined);
 
 export function ThemeProviderWrapper({ children }: { children: React.ReactNode }) {
   const [mode, setMode] = useState<PaletteMode>('light');
+  const [color, setColor] = useState<ThemeColor>(ThemeColor.blue);
+  const [colors, setColors] = useState<Color>(ColorGroup.blue);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    const saved = localStorage.getItem('themeMode');
-    if (saved === 'light' || saved === 'dark') {
-      setMode(saved);
-    }
+    const savedMode = localStorage.getItem('themeMode');
+    if (savedMode === 'light' || savedMode === 'dark') setMode(savedMode);
+    const savedColor = localStorage.getItem('themeColor');
+    if (
+      savedColor === ThemeColor.blue ||
+      savedColor === ThemeColor.red ||
+      savedColor === ThemeColor.yellow ||
+      savedColor === ThemeColor.purple ||
+      savedColor === ThemeColor.green ||
+      savedColor === ThemeColor.orange ||
+      savedColor === ThemeColor.brown ||
+      savedColor === ThemeColor.pink ||
+      savedColor === ThemeColor.grey
+    ) setColor(savedColor);
     setMounted(true);
   }, []);
+
+  useEffect(() => {
+    setColors(ColorGroup[color]);
+  }, [color]);
 
   const toggleMode = () => setMode(prev => {
     const newMode = prev === 'light' ? 'dark' : 'light';
     localStorage.setItem('themeMode', newMode);
     return newMode;
   });
+
+  const toggleColor = (newColor: ThemeColor) => {
+    if (newColor != color) {
+      setColor(newColor);
+      localStorage.setItem('themeColor', newColor);
+    }
+  };
 
   const theme = useMemo(
     () =>
@@ -38,13 +65,13 @@ export function ThemeProviderWrapper({ children }: { children: React.ReactNode }
           mode,
           ...(mode === 'light'
             ? {
-                primary: { main: blue[500], contrastText: '#000' },
-                secondary: { main: blue[300], light: blue[100] },
+                primary: { main: colors.main, contrastText: '#000' },
+                secondary: { main: colors.second, light: colors.light },
                 background: { default: '#fff' }
               }
             : {
-                primary: { main: blue[500], contrastText: '#fff' },
-                secondary: { main: blue[300], light: blue[100] },
+                primary: { main: colors.main, contrastText: '#fff' },
+                secondary: { main: colors.second, light: colors.light },
                 background: { default: grey[700] }
               }
           ),
@@ -59,7 +86,7 @@ export function ThemeProviderWrapper({ children }: { children: React.ReactNode }
           },
         },
       }),
-    [mode]
+    [mode, colors]
   );
 
   useEffect(() => {
@@ -79,7 +106,7 @@ export function ThemeProviderWrapper({ children }: { children: React.ReactNode }
   if (!mounted) return null;
 
   return (
-    <ThemeContext.Provider value={{mode, theme, toggleMode}}>
+    <ThemeContext.Provider value={{mode, color, colors, theme, toggleMode, toggleColor}}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
         {children}

@@ -2,13 +2,18 @@
 
 import { useState } from 'react';
 import type { Session, User } from 'next-auth';
+import { useContext } from 'react';
+import { ThemeContext } from '@/components/ThemeProviderWrapper';
 import { Input } from '@mui/material';
-import { blue } from '@mui/material/colors';
 import UserList from './UserList';
 
 export default function SearchUsers(props: {session: Session, friendIds: number[]}) {
   const [users, setUsers] = useState<User[]>([]);
   const [friendIds, setFriendIds] = useState<number[]>(props.friendIds);
+
+  const context = useContext(ThemeContext);
+  if (!context) return null;
+  const { colors } = context;
 
   const searchUsers = async (name: string) => {
     if (!name.trim()) {
@@ -41,7 +46,7 @@ export default function SearchUsers(props: {session: Session, friendIds: number[
           sx: {
             display: 'block',
             border: '2px solid',
-            borderColor: blue[500],
+            borderColor: colors.main,
             boxSizing: 'border-box',
             width: '100%',
             height: '100%',
