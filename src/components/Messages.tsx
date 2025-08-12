@@ -9,6 +9,7 @@ export default function Messages({session}: {session: Session}) {
   const [friends, setFriends] = useState<React.ReactNode[]>([]);
   const [messages, setMessages] = useState<Message[]>([]);
   const [friendId, setFriendId] = useState<number>();
+  const [socket, setSocket] = useState<WebSocket | null>(null);
   const messageContainerRef = useRef<HTMLDivElement>(null);
 
   const getMessages = useCallback(async (friendId: number) => {
@@ -16,9 +17,8 @@ export default function Messages({session}: {session: Session}) {
     const res = await fetch(`/api/getMessages?id=${session.user.id}&friendId=${friendId}`);
     if (!res.ok) setMessages([]);
     const contents: Message[] = await res.json();
-    const isSame = contents.length === messages.length && contents.every((m, i) => m.messageId === messages[i]?.messageId);
-    if (!isSame) setMessages(contents);
-  }, [session.user.id, messages]);
+    setMessages(contents);
+  }, [session.user.id]);
 
   useEffect(() => {
     const getFriends = async () => {
@@ -41,12 +41,24 @@ export default function Messages({session}: {session: Session}) {
 
   useEffect(() => {
     if (!friendId) return;
-    const interval = setInterval(() => {
-      getMessages(friendId);
-    }, 3000);
+    getMessages(friendId);
 
-    return () => clearInterval(interval);
-  }, [friendId, getMessages]);
+    const ws = new WebSocket(process.env.NEXT_PUBLIC_URL as string);
+    ws.onopen = () => {
+      console.log('WebSocket connected');
+      ws.send(JSON.stringify({ type: 'subscribe', userId: session.user.id, friendId }));
+    };
+
+    ws.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      if (data.type === 'message') {
+        setMessages(prev => [...prev, data.message]);
+      }
+    };
+    setSocket(ws);
+
+    return () => ws.close();
+  }, [friendId, session.user.id, getMessages]);
 
   useEffect(() => {
     messageContainerRef.current?.scrollTo({
@@ -69,7 +81,7 @@ export default function Messages({session}: {session: Session}) {
         {
           friendId === undefined
           ? <div className='bg-[color:var(--light-secondary)] w-full h-10'></div>
-          : <SendMessage senderId={session.user.id as unknown as number} receiverId={friendId} onSent={() => friendId && getMessages(friendId)} />
+          : <SendMessage senderId={session.user.id as unknown as number} receiverId={friendId} socket={socket} />
         }
       </div>
     </div>
