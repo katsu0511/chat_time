@@ -1,10 +1,10 @@
+import type { AuthOptions, User, Session } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
+import { getUserForLogin, getUser } from '@/lib/getter';
 import { compare } from 'bcrypt';
-import { getUser, getUserForLogin } from '@/lib/getter';
-import type { Session, User } from 'next-auth';
 import type { JWT } from 'next-auth/jwt';
 
-export const authOptions = {
+export const authOptions: AuthOptions = {
   providers: [
     CredentialsProvider({
       name: 'Credentials',
