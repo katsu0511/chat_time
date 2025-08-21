@@ -14,11 +14,8 @@ export const handleLogin = async (
     password,
   });
 
-  if (res?.ok) {
-    router.push('/');
-  } else {
-    setError('Failed to login');
-  }
+  if (res?.ok) router.push('/');
+  else setError('Failed to login');
 };
 
 export const handleSignup = async (
