@@ -28,13 +28,7 @@ export default function SendMessage(props: {senderId: number, receiverId: number
     if (props.socket && props.socket.readyState === WebSocket.OPEN) {
       props.socket.send(JSON.stringify({
         type: 'message',
-        message: {
-          messageId: message.messageId,
-          senderId: message.senderId,
-          receiverId: message.receiverId,
-          content: message.content,
-          createdAt: message.createdAt
-        }
+        message: message
       }));
     }
 
