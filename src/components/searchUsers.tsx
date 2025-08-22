@@ -16,7 +16,8 @@ export default function SearchUsers(props: {session: Session, friendIds: number[
   const { colors } = context;
 
   const searchUsers = async (name: string) => {
-    if (!name.trim()) {
+    name = name.trim();
+    if (!name) {
       setUsers([]);
       return;
     }
