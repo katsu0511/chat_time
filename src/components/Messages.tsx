@@ -23,7 +23,10 @@ export default function Messages({session}: {session: Session}) {
   useEffect(() => {
     const getFriends = async () => {
       const res = await fetch(`/api/getFriends?id=${session.user.id}`);
-      if (!res.ok) setFriends([]);
+      if (!res.ok) {
+        setMessages([]);
+        return;
+      }
       const json: User[] = await res.json();
       const friends = json.map(friend => (
         <li key={friend.id} className='w-full h-[96px]'>
@@ -51,9 +54,7 @@ export default function Messages({session}: {session: Session}) {
 
     ws.onmessage = (event) => {
       const data = JSON.parse(event.data);
-      if (data.type === 'message') {
-        setMessages(prev => [...prev, data.message]);
-      }
+      if (data.type === 'message') setMessages(prev => [...prev, data.message]);
     };
     setSocket(ws);
 
@@ -75,13 +76,13 @@ export default function Messages({session}: {session: Session}) {
       <div className='w-[70%] h-full'>
         <div ref={messageContainerRef} className='bg-[color:var(--light-secondary)] w-full h-[calc(100%-40px)] overflow-y-auto'>
           {messages.map(message => (
-            <MessageContent key={message.messageId} id={session.user.id as unknown as number} message={message} />
+            <MessageContent key={message.messageId} id={Number(session.user.id)} message={message} />
           ))}
         </div>
         {
           friendId === undefined
           ? <div className='bg-[color:var(--light-secondary)] w-full h-10'></div>
-          : <SendMessage senderId={session.user.id as unknown as number} receiverId={friendId} socket={socket} />
+          : <SendMessage senderId={Number(session.user.id)} receiverId={friendId} socket={socket} />
         }
       </div>
     </div>
