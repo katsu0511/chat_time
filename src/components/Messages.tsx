@@ -20,19 +20,19 @@ export default function Messages({session}: {session: Session}) {
     setMessages(contents);
   }, [session.user.id]);
 
-  useEffect(() => {
-    const getFriends = async () => {
-      const res = await fetch(`/api/getFriends?id=${session.user.id}`);
-      if (!res.ok) {
-        setMessages([]);
-        return;
-      }
-      const friends: User[] = await res.json();
-      setFriends(friends);
-    };
+  const getFriends = useCallback(async (userId: string) => {
+    const res = await fetch(`/api/getFriends?id=${userId}`);
+    if (!res.ok) {
+      setFriends([]);
+      return;
+    }
+    const friends: User[] = await res.json();
+    setFriends(friends);
+  }, []);
 
-    getFriends();
-  }, [session.user.id, friendId, getMessages]);
+  useEffect(() => {
+    getFriends(session.user.id);
+  }, [session.user.id, getFriends]);
 
   useEffect(() => {
     if (!friendId) return;
