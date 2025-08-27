@@ -4,7 +4,7 @@ import { useState, useContext } from 'react';
 import { ThemeContext } from '@/components/ThemeProviderWrapper';
 import { Input, Button } from '@mui/material';
 
-export default function SendMessage(props: {senderId: number, receiverId: number | undefined, onSent?: () => void}) {
+export default function SendMessage(props: {senderId: number, receiverId: number | undefined, socket: WebSocket | null}) {
   const [message, setMessage] = useState('');
   const context = useContext(ThemeContext);
   if (!context) return null;
@@ -23,8 +23,16 @@ export default function SendMessage(props: {senderId: number, receiverId: number
     });
 
     if (!res.ok) return null;
+
+    const message: Message = await res.json();
+    if (props.socket && props.socket.readyState === WebSocket.OPEN) {
+      props.socket.send(JSON.stringify({
+        type: 'message',
+        message: message
+      }));
+    }
+
     setMessage('');
-    props.onSent?.();
   };
 
   return (

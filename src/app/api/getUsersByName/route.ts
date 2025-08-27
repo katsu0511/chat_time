@@ -6,6 +6,5 @@ export async function GET(req: Request) {
   const name = searchParams.get('name');
   if (!name) return NextResponse.json({ error: 'Name is required' }, { status: 400 });
   const users = await getUsers(name);
-
   return NextResponse.json(users);
 }

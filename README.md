@@ -35,3 +35,21 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
 # chat_time
+
+1. Run the server for Next.js and websocket
+
+```bash
+rm -rf dist
+npx tsc -p tsconfig.server.json
+node dist/server/index.js
+```
+
+2. Run the server for MySQL
+
+```bash
+mysql.server start
+mysql -u username -p
+mysql.server stop
+```
+
+3. Open [http://localhost:3000](http://localhost:3000) with your browser
